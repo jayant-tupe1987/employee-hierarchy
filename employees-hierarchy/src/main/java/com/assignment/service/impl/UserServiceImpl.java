@@ -31,9 +31,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public JwtResponse authenticateAndGenerateToken(UserDto userDto) {
-		
 		final UserDetails userDetails = loadUserByUsername(userDto.getUsername());
-		
 		if (!bcryptEncoder.matches(userDto.getPassword(), userDetails.getPassword())) {
 			throw new BadCredentialsException(ApiConstants.INVALID_CREDENTIALS);
 		} else {

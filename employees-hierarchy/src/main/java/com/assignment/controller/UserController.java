@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.assignment.dto.ApiResponse;
 import com.assignment.dto.UserDto;
-import com.assignment.service.impl.UserServiceImpl;
+import com.assignment.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -22,17 +22,17 @@ import io.swagger.annotations.ApiOperation;
 public class UserController {
 
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 
 	@ApiOperation(value = "Authenticate User.")
 	@PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDto authenticationRequest) throws Exception {
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDto authenticationRequest) {
 		return new ResponseEntity<>(userService.authenticateAndGenerateToken(authenticationRequest), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Register User.")
 	@PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {
+	public ResponseEntity<?> registerUser(@RequestBody UserDto user) {
 		return new ResponseEntity<>(ApiResponse.getSuccessResponse(userService.save(user)), HttpStatus.OK);
 	}
 

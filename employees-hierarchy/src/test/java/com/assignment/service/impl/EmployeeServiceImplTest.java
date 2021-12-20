@@ -25,7 +25,7 @@ import com.assignment.repository.EmployeeRepository;
 import com.assignment.service.EmployeeService;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmployeeServiceServiceImplTest {
+public class EmployeeServiceImplTest {
 
 	@InjectMocks
 	private EmployeeService employeeService = new EmployeeServiceImpl();
@@ -88,6 +88,52 @@ public class EmployeeServiceServiceImplTest {
 		assertEquals(actualBuildHierarchy, expectedBuildHierarchy);
 	}
 
+	@Test(expected = GenericException.class)
+	public void testCreateHierarchyScenInValidBlankSuperVisor() {
+		try {
+			HashMap<String, String> relationships = new LinkedHashMap<>();
+			relationships.put("Sophie", "Jonas");
+			relationships.put("Nick", "");
+			relationships.put("Barbara", "Nick");
+			relationships.put("Pete", "Nick");
+			employeeService.createHierarchy(relationships);
+		} catch (final GenericException e) {
+			final String msg = ApiConstants.BLANK_SUPERVISORS_NAMES + "Nick";
+			assertEquals(msg, e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test(expected = GenericException.class)
+	public void testCreateHierarchyScenInValidBlankEmployees() {
+		try {
+			HashMap<String, String> relationships = new LinkedHashMap<>();
+			relationships.put("Sophie", "Jonas");
+			relationships.put("", "Nick");
+			relationships.put("Barbara", "Jay");
+			relationships.put("Pete", "Raj");
+			employeeService.createHierarchy(relationships);
+		} catch (final GenericException e) {
+			final String msg = ApiConstants.BLANK_EMPLOYEE_NAMES + "Nick";
+			assertEquals(msg, e.getMessage());
+			throw e;
+		}
+	}
+	@Test(expected = GenericException.class)
+	public void testCreateHierarchyScenInValidSelfSupervisor() {
+		try {
+			HashMap<String, String> relationships = new LinkedHashMap<>();
+			relationships.put("Sophie", "Sophie");
+			relationships.put("Jay", "Nick");
+			relationships.put("Raj", "Jay");
+			relationships.put("Pete", "Raj");
+			employeeService.createHierarchy(relationships);
+		} catch (final GenericException e) {
+			final String msg = ApiConstants.SELF_SUPERWISER + "Sophie";
+			assertEquals(msg, e.getMessage());
+			throw e;
+		}
+	}
 	@Test(expected = GenericException.class)
 	public void testCreateHierarchyScenInValidMultiRoot() {
 		HashMap<String, String> relationships = new LinkedHashMap<>();
