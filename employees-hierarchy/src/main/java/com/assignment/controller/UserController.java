@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.assignment.dto.ApiResponse;
 import com.assignment.dto.UserDto;
 import com.assignment.service.impl.UserServiceImpl;
 
@@ -20,7 +21,6 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("users")
 public class UserController {
 
-	
 	@Autowired
 	private UserServiceImpl userService;
 
@@ -33,7 +33,7 @@ public class UserController {
 	@ApiOperation(value = "Register User.")
 	@PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {
-		return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+		return new ResponseEntity<>(ApiResponse.getSuccessResponse(userService.save(user)), HttpStatus.OK);
 	}
 
 }

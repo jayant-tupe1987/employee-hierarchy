@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public interface EmployeeService {
 
-	String buildRelationship(HashMap<String, String> relationships);
+	String createHierarchy(HashMap<String, String> relationships);
 
 	String buildHierarchy();
 

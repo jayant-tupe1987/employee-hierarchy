@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.assignment.constant.ApiConstants;
 import com.assignment.dto.ApiResponse;
 import com.assignment.service.EmployeeService;
 
@@ -31,8 +32,8 @@ public class EmployeeController {
 	@ApiOperation(value = "Create Hierarchy.")
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createHierarchy(@RequestBody @Valid HashMap<String, String> relationships) {
-		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.buildRelationship(relationships)),
-				HttpStatus.CREATED);
+		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.createHierarchy(relationships),
+				ApiConstants.CREATE_HIERARCHY_SUCCESS), HttpStatus.CREATED);
 	}
 
 	@ApiOperation(value = "Get Hierarchy.")

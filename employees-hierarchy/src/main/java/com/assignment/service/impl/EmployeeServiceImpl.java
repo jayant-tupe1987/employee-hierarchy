@@ -23,15 +23,18 @@ import com.assignment.exception.GenericException;
 import com.assignment.repository.EmployeeRepository;
 import com.assignment.service.EmployeeService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
-public class EmployeeServiceServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public String buildRelationship(HashMap<String, String> relationships) {
+	public String createHierarchy(HashMap<String, String> relationships) {
 		mapValidator(relationships);
 		List<String> supervisorsList = new ArrayList<>(relationships.values());
 		saveAllEmployees(relationships, supervisorsList);
@@ -113,7 +116,7 @@ public class EmployeeServiceServiceImpl implements EmployeeService {
 				buildHierarchy = "{" + buildHierarchy + "}";
 			}
 		}
-		System.out.println(buildHierarchy);
+		log.info("Employee Hierarchy is: " + buildHierarchy);
 		return buildHierarchy;
 	}
 
@@ -151,15 +154,14 @@ public class EmployeeServiceServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public String getSuperiors(@NotBlank String staffName) {
-
+	public String getSuperiors(String empName) {
 		String buildHierarchy = "";
 		if (employeeRepository.count() == 0) {
 			throw new GenericException(ApiConstants.NO_EMPLOYEES);
 		} else {
-			Employee e = employeeRepository.findByName(staffName);
+			Employee e = employeeRepository.findByName(empName);
 			if (Objects.isNull(e)) {
-				throw new GenericException(ApiConstants.NO_EMPLOYEE_WITH_NAME + staffName);
+				throw new GenericException(ApiConstants.NO_EMPLOYEE_WITH_NAME + empName);
 			} else if (Objects.isNull(e.getSupervisorId())) {
 				throw new GenericException(ApiConstants.ROOT_USER_PROVIDED);
 			} else {
@@ -182,12 +184,10 @@ public class EmployeeServiceServiceImpl implements EmployeeService {
 					if (StringUtils.hasText(buildHierarchy)) {
 						buildHierarchy = "{" + buildHierarchy + "}";
 					}
-				} else {
-					throw new GenericException(ApiConstants.ROOT_USER_PROVIDED);
 				}
-
 			}
 		}
+		log.info("Supervisor hierarchy for " + empName + " is " + buildHierarchy);
 		return buildHierarchy;
 	}
 

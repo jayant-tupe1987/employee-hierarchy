@@ -1,13 +1,9 @@
 package com.assignment.service.impl;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +14,6 @@ import com.assignment.constant.ApiConstants;
 import com.assignment.dto.JwtResponse;
 import com.assignment.dto.UserDto;
 import com.assignment.entity.User;
-import com.assignment.exception.GenericException;
 import com.assignment.repository.UserRepository;
 import com.assignment.service.UserService;
 
@@ -34,32 +29,25 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
 	@Override
 	public JwtResponse authenticateAndGenerateToken(UserDto userDto) {
-		// authenticate(authenticationRequest.getUsername(),
-		// authenticationRequest.getPassword());
-
-		User user = userRepository.findByName(userDto.getUsername());
-		if (Objects.isNull(user)) {
-			throw new BadCredentialsException("User: " + userDto.getUsername() + " is not allowed ");
-		} else if (!bcryptEncoder.matches(userDto.getPassword(), user.getEncryptedPassword())) {
-			throw new BadCredentialsException("User Credentials are incorrect ");
+		
+		final UserDetails userDetails = loadUserByUsername(userDto.getUsername());
+		
+		if (!bcryptEncoder.matches(userDto.getPassword(), userDetails.getPassword())) {
+			throw new BadCredentialsException(ApiConstants.INVALID_CREDENTIALS);
 		} else {
-			final UserDetails userDetails = loadUserByUsername(userDto.getUsername());
 			return new JwtResponse(jwtTokenUtil.generateToken(userDetails));
 		}
-
 	}
 
 	@Override
-	public User save(UserDto userDto) {
+	public String save(UserDto userDto) {
 		User user = new User();
 		user.setName(userDto.getUsername());
 		user.setEncryptedPassword(bcryptEncoder.encode(userDto.getPassword()));
-		return userRepository.save(user);
+		userRepository.save(user);
+		return ApiConstants.REGISTER_SUCCESS.replace(":user", user.getName());
 	}
 
 	@Override
@@ -70,15 +58,5 @@ public class UserServiceImpl implements UserService {
 		}
 		return new org.springframework.security.core.userdetails.User(user.getName(), user.getEncryptedPassword(),
 				new ArrayList<>());
-	}
-
-	private void authenticate(String username, String password) {
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (DisabledException e) {
-			throw new GenericException(ApiConstants.USER_DISABLED, e);
-		} catch (BadCredentialsException e) {
-			throw new GenericException(ApiConstants.INVALID_CREDENTIALS, e);
-		}
 	}
 }
