@@ -1,6 +1,8 @@
 
 package com.assignment.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,13 +28,13 @@ public class UserController {
 
 	@ApiOperation(value = "Authenticate User.")
 	@PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDto authenticationRequest) {
-		return new ResponseEntity<>(userService.authenticateAndGenerateToken(authenticationRequest), HttpStatus.OK);
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid UserDto request) {
+		return new ResponseEntity<>(userService.authenticateAndGenerateToken(request), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Register User.")
 	@PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> registerUser(@RequestBody UserDto user) {
+	public ResponseEntity<?> registerUser(@RequestBody @Valid UserDto user) {
 		return new ResponseEntity<>(ApiResponse.getSuccessResponse(userService.save(user)), HttpStatus.OK);
 	}
 

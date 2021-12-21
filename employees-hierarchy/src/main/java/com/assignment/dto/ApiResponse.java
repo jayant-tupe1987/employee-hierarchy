@@ -7,12 +7,11 @@ import org.springframework.http.HttpStatus;
 import com.assignment.constant.ApiConstants;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-@Data
+
+@EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
 public class ApiResponse implements Serializable {
 
 	private static final long serialVersionUID = 7705417262508172237L;
@@ -28,14 +27,6 @@ public class ApiResponse implements Serializable {
 
 	public static ApiResponse getSuccessResponse(Object data, String message) {
 		return new ApiResponse(ApiConstants.SUCCESS, HttpStatus.OK.value(), message, data);
-	}
-
-	public static ApiResponse getSuccessResponse(Integer status, String message, Object data) {
-		return new ApiResponse(ApiConstants.SUCCESS, status, message, data);
-	}
-
-	public static ApiResponse getSuccessResponse(Object data, Integer status) {
-		return new ApiResponse(ApiConstants.SUCCESS, status, ApiConstants.SUCCESS, data);
 	}
 
 	public static ApiResponse getErrorResponse(Integer status, String message, Object data) {
