@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "EMPLOYEE")
+@Table(name = "employee")
 @Getter
 @Setter
 public class Employee implements Serializable {
@@ -23,12 +23,12 @@ public class Employee implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	//@SequenceGenerator(name = "emp_id_gen", sequenceName = "EMPLOYEE_ID_SEQ", allocationSize = 1)
-	@Column(name = "ID")
+	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "NAME", nullable = false, unique = true)
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 	
-	@Column(name = "SUPERVISOR_ID")
+	@Column(name = "supervisor_id")
 	private Long supervisorId;
 }

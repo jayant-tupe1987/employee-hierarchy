@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 @Getter
 @Setter
 public class User implements Serializable {
@@ -19,9 +19,9 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 3177370202899363311L;
 
 	@Id
-	@Column(name = "NAME", nullable = false, unique = true)
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 
-	@Column(name = "ENCRYPTED_PASSWORD", nullable = false)
+	@Column(name = "encrypted_password", nullable = false)
 	private String encryptedPassword;
 }
