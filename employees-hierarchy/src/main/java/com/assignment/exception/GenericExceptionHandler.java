@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -72,9 +73,7 @@ public class GenericExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-
 		List<String> errors = new ArrayList<String>();
-
 		for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
 			errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
 		}

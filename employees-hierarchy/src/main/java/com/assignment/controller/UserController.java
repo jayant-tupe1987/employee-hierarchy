@@ -1,8 +1,6 @@
 
 package com.assignment.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +17,6 @@ import com.assignment.service.UserService;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-
 @RequestMapping("users")
 public class UserController {
 
@@ -28,13 +25,13 @@ public class UserController {
 
 	@ApiOperation(value = "Authenticate User.")
 	@PostMapping(value = "/authenticate", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody @Valid UserDto request) {
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDto request) {
 		return new ResponseEntity<>(userService.authenticateAndGenerateToken(request), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Register User.")
 	@PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> registerUser(@RequestBody @Valid UserDto user) {
+	public ResponseEntity<?> registerUser(@RequestBody  UserDto user) {
 		return new ResponseEntity<>(ApiResponse.getSuccessResponse(userService.save(user)), HttpStatus.OK);
 	}
 

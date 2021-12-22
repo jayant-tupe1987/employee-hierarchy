@@ -39,7 +39,8 @@ public class EmployeeController {
 	@ApiOperation(value = "Get Hierarchy.")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getHierarchy() {
-		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.buildHierarchy()), HttpStatus.OK);
+		String response = employeeService.buildHierarchy();
+		return new ResponseEntity<>(ApiResponse.getSuccessResponse(response), HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Get Supervisors")

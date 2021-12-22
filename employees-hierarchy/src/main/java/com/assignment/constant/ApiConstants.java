@@ -21,4 +21,11 @@ public class ApiConstants {
 	public static final String BLANK_SUPERVISORS_NAMES = "Request has blank/null Supervisor Name. Check employee names:";
 	public static final String SELF_SUPERWISER = "Request has conflict in hierarchy i.e."
 			+ "One or more employess are self superwiser.Check Names :";
+
+	public static final String JWT_TOKEN_NO_BEARAER = "Either JWT Token missing or it does not begin with Bearer String";
+	public static final String JWT_TOKEN_EMPTY = "Either JWT Token is empty or in-correct";
+	
+	public static final String JWT_TOKEN_EXPIRED = "JWT Token has expired";
+	public static final String UNABLE_TO_GET_JWT_TOKEN = "Unable to get JWT Token";
+
 }
