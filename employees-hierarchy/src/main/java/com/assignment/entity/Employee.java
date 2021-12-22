@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -22,8 +21,8 @@ public class Employee implements Serializable {
 	private static final long serialVersionUID = 8194494545160391633L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emp_id_gen")
-	@SequenceGenerator(name = "emp_id_gen", sequenceName = "EMPLOYEE_ID_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@SequenceGenerator(name = "emp_id_gen", sequenceName = "EMPLOYEE_ID_SEQ", allocationSize = 1)
 	@Column(name = "ID")
 	private Long id;
 	
