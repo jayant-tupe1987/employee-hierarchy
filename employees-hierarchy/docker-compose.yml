@@ -7,7 +7,13 @@ services:
       - 8081:8081
     depends_on:
       - mysql_db
-    command: sh -c './wait-for mysql_db:3306 --timeout=0 --strict -- java -jar /employees-hierarchy.jar'
+    command: sh -c "/wait && java -jar /employees-hierarchy.jar"
+    environment:
+       WAIT_HOSTS: mysql_db:3306
+       WAIT_HOSTS_TIMEOUT=: 3000s
+       WAIT_SLEEP_INTERVAL: 60s
+       WAIT_HOST_CONNECT_TIMEOUT: 3000s
+       WAIT_AFTER_HOSTS: 300s
   mysql_db:
     image: "mysql:8.0"
     restart: always

@@ -6,13 +6,13 @@ flush privileges;
 
 use personia;
 
-create table users (
+create table if not exists users (
   name varchar(200) not null,
   encrypted_password varchar(200) not null,
   primary key (name)
 );
 
-create table employee (
+create table if not exists employee (
   id int not null auto_increment,
   name varchar(200) not null,
   supervisor_id int,

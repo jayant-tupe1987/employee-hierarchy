@@ -1,18 +1,22 @@
-CREATE TABLE USERS (
-  NAME VARCHAR(200) NOT NULL,
-  ENCRYPTED_PASSWORD VARCHAR(200) NOT NULL,
-  PRIMARY KEY (NAME)
+create database if not exists personia;
+
+create user 'personia'@'%' identified by 'personia';
+grant create, alter, index, lock tables, references, update, delete, drop, select, insert on `personia`.* to 'personia'@'%';
+flush privileges;
+
+use personia;
+
+create table if not exists users (
+  name varchar(200) not null,
+  encrypted_password varchar(200) not null,
+  primary key (name)
 );
 
-CREATE TABLE EMPLOYEE (
-  ID NUMBER NOT NULL AUTO_INCREMENT,
-  NAME VARCHAR(200) NOT NULL,
-  SUPERVISOR_ID NUMBER,
-  PRIMARY KEY (ID)
+create table if not exists employee (
+  id int not null auto_increment,
+  name varchar(200) not null,
+  supervisor_id int,
+  primary key (id)
 );
  
- CREATE UNIQUE INDEX "EMPLOYEE_NAME" ON "EMPLOYEE"
-  (
-    "NAME"
-  );
-
+ 
