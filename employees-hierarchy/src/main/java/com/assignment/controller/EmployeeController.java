@@ -20,8 +20,6 @@ import com.assignment.constant.ApiConstants;
 import com.assignment.dto.ApiResponse;
 import com.assignment.service.EmployeeService;
 
-import io.swagger.annotations.ApiOperation;
-
 @RestController
 @RequestMapping("hierarchy")
 public class EmployeeController {
@@ -29,21 +27,18 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	@ApiOperation(value = "Create Hierarchy.")
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createHierarchy(@RequestBody @Valid HashMap<String, String> relationships) {
 		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.createHierarchy(relationships),
 				ApiConstants.CREATE_HIERARCHY_SUCCESS), HttpStatus.CREATED);
 	}
 
-	@ApiOperation(value = "Get Hierarchy.")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getHierarchy() {
 		String response = employeeService.buildHierarchy();
 		return new ResponseEntity<>(ApiResponse.getSuccessResponse(response), HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Get Supervisors")
 	@GetMapping(value = "/{name}/superiors", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<?> getSuperiors(@PathVariable("name") @NotBlank String staffName) {
 		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.getSuperiors(staffName)),
