@@ -56,14 +56,19 @@ Authorization: Bearer {`$token-generated`}
 Expected response:{
     "status": "Success",
     "code": 200,
-    "message": "Employee Hierarchy Created Successfully.",
+    "message": "Available Hierarchy Fetched Successfully.",
     "data": "{"Jonas": {"Sophie": {"Nick": {"Pete": {}  , "Barbara": {} } } } }"
 }
 
 GET  /hierarchy/{name}/superiors (Get superiors)
 URL: `http://localhost:8081/employee-hierarchy/hierarchy/Pete/superiors`
 Authorization: Bearer {`$token-generated`}
-Expected response: "data": "{"Jonus": {"Sophie": {"Nick": {"Pete": {} } } } }"
+Expected response: {
+    "status": "Success",
+    "code": 200,
+    "message": "Available Hierarchy Fetched Successfully.",
+    "data": "{"Jonas": {"Sophie": {"Nick": {"Pete": {} } } } }"
+}
 ```
 
 ## JUnits

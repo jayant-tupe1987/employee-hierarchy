@@ -1,7 +1,8 @@
 package com.assignment.configuration.auth.filter;
 
 import static org.mockito.Mockito.doReturn;
-
+import static org.mockito.Mockito.verify;
+import static org.mockito.Matchers.any;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -13,8 +14,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -24,6 +28,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.assignment.configuration.auth.JwtTokenUtil;
+import com.assignment.constant.ApiConstants;
+import com.assignment.dto.ApiResponse;
+import com.assignment.exception.GenericException;
+import com.assignment.exception.GenericExceptionHandler;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JwtRequestFilterTest {
@@ -33,6 +41,9 @@ public class JwtRequestFilterTest {
 
 	@Mock
 	private UserDetailsService userDetailsService;
+
+	@Mock
+	private GenericExceptionHandler genericExceptionHandler;
 
 	private JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
 
@@ -65,4 +76,55 @@ public class JwtRequestFilterTest {
 		jwtRequestFilter.doFilterInternal(request, response, chain);
 	}
 
+	@Test
+	public void testDoFilterInternalInValidUnableToGetJWT() throws ServletException, IOException {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		FilterChain chain = new MockFilterChain();
+		request.addHeader("Authorization", "Bearer ");
+
+		ApiResponse apiError = ApiResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
+				ApiConstants.UNABLE_TO_GET_JWT_TOKEN);
+		ResponseEntity<?> res = new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+		doReturn(userDetails).when(userDetailsService).loadUserByUsername("Jayant");
+		doReturn(res).when(genericExceptionHandler)
+				.handleAllExceptions(new GenericException(ApiConstants.UNABLE_TO_GET_JWT_TOKEN), null);
+		jwtRequestFilter.doFilterInternal(request, response, chain);
+		verify(genericExceptionHandler, Mockito.times(1)).handleAllExceptions(any(), any());
+	}
+
+	@Test
+	public void testDoFilterInternalInValidTokenWithNoBearer() throws ServletException, IOException {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		FilterChain chain = new MockFilterChain();
+		request.addHeader("Authorization", "ghhsds ");
+
+		ApiResponse apiError = ApiResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
+				ApiConstants.JWT_TOKEN_NO_BEARAER);
+		ResponseEntity<?> res = new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+		doReturn(userDetails).when(userDetailsService).loadUserByUsername("Jayant");
+		doReturn(res).when(genericExceptionHandler)
+				.handleAllExceptions(new GenericException(ApiConstants.JWT_TOKEN_NO_BEARAER), null);
+		jwtRequestFilter.doFilterInternal(request, response, chain);
+		verify(genericExceptionHandler, Mockito.times(1)).handleAllExceptions(any(), any());
+	}
+
+	
+	@Test
+	public void testDoFilterInternalInValidToken() throws ServletException, IOException {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		MockHttpServletResponse response = new MockHttpServletResponse();
+		FilterChain chain = new MockFilterChain();
+		request.addHeader("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqYXlhbnQiLCJleHAiOjE2NDAyODg4ODEsImlhdCI6MTY0MDIwMjQ4MX0.Hmt6qlnYhc8AgQoYopyWaTJaDqwHkU6-z5OMBdRJY5xkEWIntagisSjLzb1mIJ6ZDYjw2mlptzluwKQ8xByg ");
+
+		ApiResponse apiError = ApiResponse.getErrorResponse(HttpStatus.BAD_REQUEST.value(),
+				ApiConstants.JWT_TOKEN_NO_BEARAER);
+		ResponseEntity<?> res = new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+		doReturn(userDetails).when(userDetailsService).loadUserByUsername("Jayant");
+		doReturn(res).when(genericExceptionHandler)
+				.handleAllExceptions(new GenericException(ApiConstants.JWT_TOKEN_NO_BEARAER), null);
+		jwtRequestFilter.doFilterInternal(request, response, chain);
+		verify(genericExceptionHandler, Mockito.times(1)).handleAllExceptions(any(), any());
+	}
 }

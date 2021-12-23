@@ -1,23 +1,25 @@
 package com.assignment.service.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
 import com.assignment.constant.ApiConstants;
 import com.assignment.dto.TreeNode;
 import com.assignment.entity.Employee;
 import com.assignment.exception.GenericException;
 import com.assignment.repository.EmployeeRepository;
 import com.assignment.service.EmployeeService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -29,14 +31,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public String createHierarchy(HashMap<String, String> relationships) {
+	public String updateHierarchy(Map<String, String> relationships) {
+		return createOrUpdateHierarchy(relationships);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public String createHierarchy(Map<String, String> relationships) {
+		employeeRepository.deleteAll();
+		return createOrUpdateHierarchy(relationships);
+	}
+
+	private String createOrUpdateHierarchy(Map<String, String> relationships) {
 		mapValidator(relationships);
 		List<String> supervisorsList = new ArrayList<>(relationships.values());
 		saveAllEmployees(relationships, supervisorsList);
 		return buildHierarchy();
 	}
 
-	private void saveAllEmployees(HashMap<String, String> relationships, List<String> supervisorsList) {
+	private void saveAllEmployees(Map<String, String> relationships, List<String> supervisorsList) {
 		supervisorsList.forEach(t -> {
 			if (Objects.isNull(employeeRepository.findByName(t))) {
 				Employee e = new Employee();
@@ -60,7 +73,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		});
 	}
 
-	private void mapValidator(HashMap<String, String> relationships) {
+	private void mapValidator(Map<String, String> relationships) {
 
 		List<String> blankEmploees = relationships.entrySet().parallelStream()
 				.filter(e -> !StringUtils.hasText(e.getKey())).map(Map.Entry::getValue).collect(Collectors.toList());

@@ -9,6 +9,7 @@ public class ApiConstants {
 	public static final String USER_NOT_ALLOWED = " is not allowed";
 	public static final String INVALID_CREDENTIALS = "Invalid Credentials";
 	public static final String REGISTER_SUCCESS = ":user registered successfully.";
+	public static final String UPDATE_HIERARCHY_SUCCESS = "Employee Hierarchy Updated Successfully.";
 	public static final String CREATE_HIERARCHY_SUCCESS = "Employee Hierarchy Created Successfully.";
 	public static final String FETCH_HIERARCHY_SUCCESS = "Available Hierarchy Fetched Successfully.";
 	public static final String NO_USER_FOUND = "User not found with username: ";

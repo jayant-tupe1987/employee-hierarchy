@@ -52,6 +52,23 @@ public class EmployeeControllerTest {
 		assertEquals(responseExpected, responseReturned);
 		Mockito.verify(employeeService, Mockito.times(1)).createHierarchy(any());
 	}
+	
+	@Test
+	public void testUpdateHierarchySceValid() {
+		HashMap<String, String> relationships = new LinkedHashMap<>();
+		relationships.put("Sophie", "Jonas");
+		relationships.put("Nick", "Sophie");
+		relationships.put("Barbara", "Nick");
+		relationships.put("Pete", "Nick");
+		String expectedBuildHierarchy = "{\"Jonus\": {\"Sophie\": {\"Nick\": {\"Barbara\": {}  , \"Pete\": {} } } } }";
+		ResponseEntity responseExpected = new ResponseEntity<>(
+				ApiResponse.getSuccessResponse(expectedBuildHierarchy, ApiConstants.UPDATE_HIERARCHY_SUCCESS),
+				HttpStatus.OK);
+		doReturn(expectedBuildHierarchy).when(employeeService).updateHierarchy(relationships);
+		ResponseEntity responseReturned = employeeController.updateHierarchy(relationships);
+		assertEquals(responseExpected, responseReturned);
+		Mockito.verify(employeeService, Mockito.times(1)).updateHierarchy(any());
+	}
 
 	@Test
 	public void testGetHierarchySceValid() {

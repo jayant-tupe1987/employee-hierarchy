@@ -23,4 +23,4 @@ services:
       MYSQL_DATABASE: personia
       MYSQL_ROOT_PASSWORD: sysadmin@123
     volumes: 
-            - ./init:/docker-entrypoint-initdb.d
+            - ./db-init-script:/docker-entrypoint-initdb.d

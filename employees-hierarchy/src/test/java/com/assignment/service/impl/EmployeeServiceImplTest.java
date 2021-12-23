@@ -88,6 +88,52 @@ public class EmployeeServiceImplTest {
 		assertEquals(actualBuildHierarchy, expectedBuildHierarchy);
 	}
 
+	@Test
+	public void testUpdateHierarchyScenValid() {
+		HashMap<String, String> relationships = new LinkedHashMap<>();
+		relationships.put("Sophie", "Jonas");
+		relationships.put("Nick", "Sophie");
+		relationships.put("Barbara", "Nick");
+		relationships.put("Pete", "Nick");
+		doReturn(new Employee()).when(employeeRepository).findByName(any());
+		doReturn(new Long(1)).when(employeeRepository).count();
+		List<Employee> rootSupervisorCountList = new ArrayList<Employee>();
+		Employee e = new Employee();
+		e.setId(1L);
+		e.setName("Jonus");
+		e.setSupervisorId(null);
+		rootSupervisorCountList.add(e);
+		doReturn(rootSupervisorCountList).when(employeeRepository).findBySupervisorIdIsNull();
+		Employee e1 = new Employee();
+		e1.setId(2L);
+		e1.setName("Sophie");
+		e1.setSupervisorId(1L);
+		List<Employee> childList1 = new ArrayList<Employee>();
+		childList1.add(e1);
+		doReturn(childList1).when(employeeRepository).findBySupervisorId(1L);
+		Employee e2 = new Employee();
+		e2.setId(3L);
+		e2.setName("Nick");
+		e2.setSupervisorId(2L);
+		List<Employee> childList2 = new ArrayList<Employee>();
+		childList2.add(e2);
+		doReturn(childList2).when(employeeRepository).findBySupervisorId(2L);
+		Employee e3 = new Employee();
+		e3.setId(4L);
+		e3.setName("Barbara");
+		e3.setSupervisorId(3L);
+		List<Employee> childList3 = new ArrayList<Employee>();
+		childList3.add(e3);
+		Employee e4 = new Employee();
+		e4.setId(5L);
+		e4.setName("Pete");
+		e4.setSupervisorId(3L);
+		childList3.add(e4);
+		doReturn(childList3).when(employeeRepository).findBySupervisorId(3L);
+		String actualBuildHierarchy = employeeService.updateHierarchy(relationships);
+		String expectedBuildHierarchy = "{\"Jonus\": {\"Sophie\": {\"Nick\": {\"Barbara\": {}  , \"Pete\": {} } } } }";
+		assertEquals(actualBuildHierarchy, expectedBuildHierarchy);
+	}
 	@Test(expected = GenericException.class)
 	public void testCreateHierarchyScenInValidBlankSuperVisor() {
 		try {
