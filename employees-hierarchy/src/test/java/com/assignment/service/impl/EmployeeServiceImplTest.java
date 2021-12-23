@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.assignment.constant.ApiConstants;
 import com.assignment.entity.Employee;
@@ -35,10 +36,13 @@ public class EmployeeServiceImplTest {
 
 	private String empName;
 
+	private String superierLevel = "2";
+
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
 		empName = "Jayant";
+		ReflectionTestUtils.setField(employeeService, "superierLevel", superierLevel);
 	}
 
 	@Test
@@ -134,6 +138,16 @@ public class EmployeeServiceImplTest {
 		String expectedBuildHierarchy = "{\"Jonus\": {\"Sophie\": {\"Nick\": {\"Barbara\": {}  , \"Pete\": {} } } } }";
 		assertEquals(actualBuildHierarchy, expectedBuildHierarchy);
 	}
+
+	@Test(expected = GenericException.class)
+	public void testUpdateHierarchyScenInValid() {
+		HashMap<String, String> relationships = new LinkedHashMap<>();
+		relationships.put("Sophie", "Jonas");
+		relationships.put("Nick", "Sophie");
+		doReturn(0L).when(employeeRepository).count();
+		employeeService.updateHierarchy(relationships);
+	}
+
 	@Test(expected = GenericException.class)
 	public void testCreateHierarchyScenInValidBlankSuperVisor() {
 		try {
@@ -165,6 +179,7 @@ public class EmployeeServiceImplTest {
 			throw e;
 		}
 	}
+
 	@Test(expected = GenericException.class)
 	public void testCreateHierarchyScenInValidSelfSupervisor() {
 		try {
@@ -180,6 +195,7 @@ public class EmployeeServiceImplTest {
 			throw e;
 		}
 	}
+
 	@Test(expected = GenericException.class)
 	public void testCreateHierarchyScenInValidMultiRoot() {
 		HashMap<String, String> relationships = new LinkedHashMap<>();

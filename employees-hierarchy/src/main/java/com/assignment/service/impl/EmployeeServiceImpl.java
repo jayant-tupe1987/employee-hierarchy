@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -29,9 +30,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
+	@Value("${superier.level}")
+	private String superierLevel;
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public String updateHierarchy(Map<String, String> relationships) {
+		if (employeeRepository.count() == 0) {
+			throw new GenericException(ApiConstants.UPDATE_NOT_ALLOWED);
+		}
 		return createOrUpdateHierarchy(relationships);
 	}
 
@@ -187,7 +194,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 					children.add(empNode);
 					superVisorNode.setChildren(children);
 					empNode.setParent(superVisorNode);
-					TreeNode<String> supervisorNode = setParenNode(empNode);
+					Integer superierLevelCounter = Integer.parseInt(superierLevel);
+					TreeNode<String> supervisorNode = setParenNode(empNode, superierLevelCounter);
 					buildHierarchy = buildString(supervisorNode, buildHierarchy);
 					if (StringUtils.hasText(buildHierarchy)) {
 						buildHierarchy = "{" + buildHierarchy + "}";
@@ -199,13 +207,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return buildHierarchy;
 	}
 
-	public TreeNode<String> setParenNode(TreeNode<String> node) {
+	public TreeNode<String> setParenNode(TreeNode<String> node, Integer superierLevelCounter) {
 		TreeNode<String> parentNode = node.getParent();
 		if (Objects.isNull(parentNode.getId())) {
 			return node;
 		}
 		Optional<Employee> superVisor = employeeRepository.findById(parentNode.getId());
-		if (superVisor.isPresent()) {
+		if (superVisor.isPresent() && superierLevelCounter > 0) {
 			Employee superVisorEmp = superVisor.get();
 			parentNode.setName(superVisorEmp.getName());
 			List<TreeNode<String>> children = new ArrayList<>();
@@ -215,7 +223,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			TreeNode<String> parentParentNode = new TreeNode<String>();
 			parentParentNode.setId(superVisorEmp.getSupervisorId());
 			parentNode.setParent(parentParentNode);
-			node = setParenNode(parentNode);
+			node = setParenNode(parentNode, superierLevelCounter - 1);
 		}
 		return node;
 	}

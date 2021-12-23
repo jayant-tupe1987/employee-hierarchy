@@ -70,6 +70,13 @@ Expected response: {
     "data": "{"Jonas": {"Sophie": {"Nick": {"Pete": {} } } } }"
 }
 ```
+##Deploy using Docker
+- Copy zip folder and unzip it
+- Check docker-compose.yml, Dockerfile,employees-hierarchy-0.0.2-SNAPSHOT jar inside target and db-init-script file/folder present inside employees-hierarchy folder
+- Open command prompt from employees-hierarchy folder and run command `docker compose build` 
+- After successful Build, run `docker compose up`
+- Wait for application to start. You can check console logs for the same(Wait until you see - com.assignment.Application               : Started Application ).
+- Available APIs and API Usage section to call APIs using postman
 
 ## JUnits
 Test cases cover most of core logic, which is locate in `service layer` , `repository layer` and `controller layer`
