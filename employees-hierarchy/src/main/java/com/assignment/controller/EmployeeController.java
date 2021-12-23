@@ -35,13 +35,12 @@ public class EmployeeController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getHierarchy() {
-		String response = employeeService.buildHierarchy();
-		return new ResponseEntity<>(ApiResponse.getSuccessResponse(response), HttpStatus.OK);
+		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.buildHierarchy(),ApiConstants.FETCH_HIERARCHY_SUCCESS), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/{name}/superiors", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<?> getSuperiors(@PathVariable("name") @NotBlank String staffName) {
-		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.getSuperiors(staffName)),
+		return new ResponseEntity<>(ApiResponse.getSuccessResponse(employeeService.getSuperiors(staffName),ApiConstants.FETCH_HIERARCHY_SUCCESS),
 				HttpStatus.OK);
 	}
 }

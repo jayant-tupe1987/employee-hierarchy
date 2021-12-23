@@ -10,6 +10,7 @@ public class ApiConstants {
 	public static final String INVALID_CREDENTIALS = "Invalid Credentials";
 	public static final String REGISTER_SUCCESS = ":user registered successfully.";
 	public static final String CREATE_HIERARCHY_SUCCESS = "Employee Hierarchy Created Successfully.";
+	public static final String FETCH_HIERARCHY_SUCCESS = "Available Hierarchy Fetched Successfully.";
 	public static final String NO_USER_FOUND = "User not found with username: ";
 	public static final String MULTI_ROOT = "There are multiple roots present, please check your hierarchy for submission";
 	public static final String EMPLY_HIERARCHY = "Request has no hierarchy";

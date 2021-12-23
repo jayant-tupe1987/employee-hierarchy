@@ -56,7 +56,7 @@ public class EmployeeControllerTest {
 	@Test
 	public void testGetHierarchySceValid() {
 		String expectedBuildHierarchy = "{\"Jonus\": {\"Sophie\": {\"Nick\": {\"Barbara\": {}  , \"Pete\": {} } } } }";
-		ResponseEntity responseExpected = new ResponseEntity<>(ApiResponse.getSuccessResponse(expectedBuildHierarchy),
+		ResponseEntity responseExpected = new ResponseEntity<>(ApiResponse.getSuccessResponse(expectedBuildHierarchy,ApiConstants.FETCH_HIERARCHY_SUCCESS),
 				HttpStatus.OK);
 		doReturn(expectedBuildHierarchy).when(employeeService).buildHierarchy();
 		ResponseEntity responseReturned = employeeController.getHierarchy();
@@ -68,7 +68,7 @@ public class EmployeeControllerTest {
 	public void testGetSuperiorsSceValid() {
 		String expectedBuildHierarchy = "{\"Jonus\": {\"Sophie\": {\"Nick\": {\"Barbara\": {}  , \"Pete\": {} } } } }";
 		ResponseEntity responseExpected = new ResponseEntity<>(
-				ApiResponse.getSuccessResponse("{\"Jonus\": {\"Sophie\": {\"Nick\": {} } } }"), HttpStatus.OK);
+				ApiResponse.getSuccessResponse("{\"Jonus\": {\"Sophie\": {\"Nick\": {} } } }",ApiConstants.FETCH_HIERARCHY_SUCCESS), HttpStatus.OK);
 		doReturn("{\"Jonus\": {\"Sophie\": {\"Nick\": {} } } }").when(employeeService)
 				.getSuperiors(any());
 		ResponseEntity responseReturned = employeeController.getSuperiors("Nick");
