@@ -21,6 +21,11 @@ import com.assignment.constant.ApiConstants;
 import com.assignment.dto.ApiResponse;
 import com.assignment.service.EmployeeService;
 
+/**
+ * EmployeeController has apis to create, update and get employee hierarchy 
+ * @author Jayant
+ *
+ */
 @RestController
 @RequestMapping("hierarchy")
 public class EmployeeController {

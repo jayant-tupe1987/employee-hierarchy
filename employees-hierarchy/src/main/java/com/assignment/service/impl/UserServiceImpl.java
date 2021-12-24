@@ -17,6 +17,11 @@ import com.assignment.entity.User;
 import com.assignment.repository.UserRepository;
 import com.assignment.service.UserService;
 
+/**
+ * UserServiceImpl class has services related to user authenticate and register
+ * @author Jayant
+ *
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
