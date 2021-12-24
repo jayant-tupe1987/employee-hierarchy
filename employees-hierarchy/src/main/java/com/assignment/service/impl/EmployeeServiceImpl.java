@@ -23,6 +23,13 @@ import com.assignment.service.EmployeeService;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * EmployeeServiceImpl class has services related to to create, update and get
+ * employee hierarchy
+ * 
+ * @author Jayant
+ *
+ */
 @Slf4j
 @Service
 public class EmployeeServiceImpl implements EmployeeService {

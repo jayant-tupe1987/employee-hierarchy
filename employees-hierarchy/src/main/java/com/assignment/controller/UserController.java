@@ -14,6 +14,11 @@ import com.assignment.dto.ApiResponse;
 import com.assignment.dto.UserDto;
 import com.assignment.service.UserService;
 
+/**
+ * UserController has apis to register, authenticate user
+ * @author Jayant
+ *
+ */
 @RestController
 @RequestMapping("users")
 public class UserController {
