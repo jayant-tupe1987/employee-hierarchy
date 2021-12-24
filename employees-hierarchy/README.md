@@ -13,7 +13,7 @@ Technology stack includes [Spring Boot](https://spring.io/projects/spring-boot) 
 ## Available APIs
 ```
 POST /users/authenticate (authenticate user and get JWT token)
-POST /users/register (Register user)
+POST /users/register (Register user. This api is not exposed to all.)
 POST /hierarchy (Create hierarchy)
 GET  /hierarchy (Get hierarchy)
 GET  /hierarchy/{name}/superiors (Get superiors)
@@ -24,7 +24,7 @@ GET  /hierarchy/{name}/superiors (Get superiors)
 From now, we should able to access web api using postman with below details:
 
 ```
-Register user POST /users/register
+Register user POST /users/register This api is not exposed to all.
 URL: `http://localhost:8081/employee-hierarchy/users/register` Replace dummy user and dummy password with your details
 Body: {"username" : "dummy user","password":"dummy password"}
 Expected response:{"status": "Success","code": 200,"message": "Success","data": "{dummy user} registered successfully."}
