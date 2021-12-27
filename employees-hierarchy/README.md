@@ -87,10 +87,10 @@ Follow default Java code style on Eclipse IDE
 
 ## A deeper look
 
-### Applied design pattern
-- Inverse of control
+### Applied design pattern/Principle
+- Dependency Injection(Use Inverse of control Principle)
 - Repository pattern
-- SOLID
+- SOLID principles
 - DTO - Data transfer object
 
 ### Build hierarchy algorithm
