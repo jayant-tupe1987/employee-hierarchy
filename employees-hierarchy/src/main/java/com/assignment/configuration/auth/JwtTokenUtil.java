@@ -51,7 +51,7 @@ public class JwtTokenUtil implements Serializable {
 		Map<String, Object> claims = new HashMap<>();
 		return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
 		.setExpiration(new Date(System.currentTimeMillis() + expiryTime))
-		.signWith(SignatureAlgorithm.HS512, secret).compact();
+		.signWith(SignatureAlgorithm.HS256, secret).compact();
 	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {
