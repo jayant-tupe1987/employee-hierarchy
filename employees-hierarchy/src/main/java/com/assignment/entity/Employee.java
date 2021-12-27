@@ -22,7 +22,6 @@ public class Employee implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//@SequenceGenerator(name = "emp_id_gen", sequenceName = "EMPLOYEE_ID_SEQ", allocationSize = 1)
 	@Column(name = "id")
 	private Long id;
 	
