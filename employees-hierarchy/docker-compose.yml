@@ -10,9 +10,6 @@ services:
     command: sh -c "/wait && java -jar /employees-hierarchy.jar"
     environment:
        WAIT_HOSTS: mysql_db:3306
-       WAIT_HOSTS_TIMEOUT=: 3000s
-       WAIT_SLEEP_INTERVAL: 60s
-       WAIT_HOST_CONNECT_TIMEOUT: 3000s
        WAIT_AFTER_HOSTS: 300s
   mysql_db:
     image: "mysql:8.0"
